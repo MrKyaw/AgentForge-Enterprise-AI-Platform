@@ -512,3 +512,9 @@ MIT — see [LICENSE](LICENSE).
 **MrKyaw** — building governed AI systems that are testable, observable, and honest about their limits.
 
 If this project is useful for your team, start with [ABOUT.md](ABOUT.md) for the design rationale and a guided review path.
+
+---
+
+⭐ **Star this repo if you find it useful!**
+
+[Report Bug](https://github.com/MrKyaw/AgentForge-Enterprise-AI-Platform/issues/new?template=bug_report.md) · [Request Feature](https://github.com/MrKyaw/AgentForge-Enterprise-AI-Platform/issues/new?template=feature_request.md) · [Ask Question](https://github.com/MrKyaw/AgentForge-Enterprise-AI-Platform/issues)
