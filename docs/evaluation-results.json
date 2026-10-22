@@ -1,0 +1,322 @@
+{
+  "generated_at": "2026-10-22T11:58:12.849Z",
+  "total": 20,
+  "passed": 20,
+  "failed": 0,
+  "pass_rate": 100.0,
+  "keyword_hit_rate": 100.0,
+  "citation_rate": 100.0,
+  "refusal_accuracy": 100.0,
+  "avg_latency_ms": 2.706,
+  "p95_latency_ms": 3.351,
+  "total_cost_usd": 0.0,
+  "cases": [
+    {
+      "id": "research-concentration",
+      "agent": "research-copilot",
+      "passed": true,
+      "status": "completed",
+      "answer": "Based on the approved knowledge base: Liquidity and cash The Core Equity strategy must hold a cash buffer between 2% and 8% of portfolio market value [1]. It applies to the Core Equity, Balanced, and Income strategies [4]. Concentration limits A single issuer may not exceed **5% of portfolio market value** at the time of purchase [2].",
+      "latency_ms": 8.51,
+      "cost_usd": 0.0,
+      "citation_count": 3,
+      "keyword_hits": [
+        "5%",
+        "single issuer"
+      ],
+      "failures": [],
+      "trace_id": "tr_18ae237879af4acc"
+    },
+    {
+      "id": "research-review-threshold",
+      "agent": "research-copilot",
+      "passed": true,
+      "status": "completed",
+      "answer": "Based on the approved knowledge base: A position that grows above 4.5% of portfolio market value must be reviewed at the next scheduled portfolio risk meeting [1]. Concentration limits A single issuer may not exceed **5% of portfolio market value** at the time of purchase [1]. A position above 6% requires written approval from the Chief Investment Officer and a documented remediation plan within five business days [1].",
+      "latency_ms": 2.685,
+      "cost_usd": 0.0,
+      "citation_count": 1,
+      "keyword_hits": [
+        "4.5%"
+      ],
+      "failures": [],
+      "trace_id": "tr_f1df498f70f446ea"
+    },
+    {
+      "id": "research-hard-limit",
+      "agent": "research-copilot",
+      "passed": true,
+      "status": "completed",
+      "answer": "Based on the approved knowledge base: A position above 6% requires written approval from the Chief Investment Officer and a documented remediation plan within five business days [1]. A position that grows above 4.5% of portfolio market value must be reviewed at the next scheduled portfolio risk meeting [1]. above 20% of a portfolio's non-domestic exposure require a hedge designation memo [3].",
+      "latency_ms": 2.346,
+      "cost_usd": 0.0,
+      "citation_count": 2,
+      "keyword_hits": [
+        "chief investment officer",
+        "6%"
+      ],
+      "failures": [],
+      "trace_id": "tr_61f0df41f2834b98"
+    },
+    {
+      "id": "research-cash",
+      "agent": "research-copilot",
+      "passed": true,
+      "status": "completed",
+      "answer": "Based on the approved knowledge base: Liquidity and cash The Core Equity strategy must hold a cash buffer between 2% and 8% of portfolio market value [1]. A cash weight outside the permitted range requires a documented tactical allocation memo approved by the Chief Investment Officer [1]. It applies to the Core Equity, Balanced, and Income strategies [2].",
+      "latency_ms": 2.299,
+      "cost_usd": 0.0,
+      "citation_count": 2,
+      "keyword_hits": [
+        "2%",
+        "8%"
+      ],
+      "failures": [],
+      "trace_id": "tr_f6ececc432c04b5e"
+    },
+    {
+      "id": "research-liquidity",
+      "agent": "research-copilot",
+      "passed": true,
+      "status": "completed",
+      "answer": "Based on the approved knowledge base: Positions representing more than 10% of a security's average daily trading volume require a liquidation plan [1]. than 10% of a security's average daily trading volume require a liquidation plan [2]. A position above 6% requires written approval from the Chief Investment Officer and a documented remediation plan within five business days [3].",
+      "latency_ms": 2.298,
+      "cost_usd": 0.0,
+      "citation_count": 3,
+      "keyword_hits": [
+        "10%",
+        "liquidation plan"
+      ],
+      "failures": [],
+      "trace_id": "tr_6a073eda5f4a46b7"
+    },
+    {
+      "id": "client-complaint",
+      "agent": "client-service-copilot",
+      "passed": true,
+      "status": "completed",
+      "answer": "Based on the approved knowledge base: Complaints Every client complaint must be acknowledged within **two business days** of receipt [1]. A complaint unresolved after twenty business days is escalated to the Head of Client Experience and the Compliance team [1]. During market disruptions, the service desk publishes an updated response target on the client portal [1].",
+      "latency_ms": 2.34,
+      "cost_usd": 0.0,
+      "citation_count": 1,
+      "keyword_hits": [
+        "two business days"
+      ],
+      "failures": [],
+      "trace_id": "tr_73eb15be11a54bf8"
+    },
+    {
+      "id": "client-resolution",
+      "agent": "client-service-copilot",
+      "passed": true,
+      "status": "completed",
+      "answer": "Based on the approved knowledge base: The target resolution time is **ten business days** [1]. During market disruptions, the service desk publishes an updated response target on the client portal [1]. Complaints Every client complaint must be acknowledged within **two business days** of receipt [1].",
+      "latency_ms": 2.36,
+      "cost_usd": 0.0,
+      "citation_count": 1,
+      "keyword_hits": [
+        "ten business days"
+      ],
+      "failures": [],
+      "trace_id": "tr_835700ddef804635"
+    },
+    {
+      "id": "client-onboarding",
+      "agent": "client-service-copilot",
+      "passed": true,
+      "status": "completed",
+      "answer": "Based on the approved knowledge base: Institutional onboarding An institutional client cannot be activated until the onboarding team receives and validates the following documents: a signed investment management agreement, an **investment policy statement** (IPS), **beneficial ownership** documentation, **AML/KYC** evidence, authorized signatory list, tax forms, and custody instructions [2]. Client Onboarding Standard > Synthetic reference document for the AgentForge demo [2]. Material exceptions are reported to the Client Onboarding Committee monthly [1].",
+      "latency_ms": 2.332,
+      "cost_usd": 0.0,
+      "citation_count": 2,
+      "keyword_hits": [
+        "investment policy statement",
+        "beneficial ownership",
+        "aml"
+      ],
+      "failures": [],
+      "trace_id": "tr_70b578e6e362469d"
+    },
+    {
+      "id": "governance-human-review",
+      "agent": "governance-advisor",
+      "passed": true,
+      "status": "completed",
+      "answer": "Based on the approved knowledge base: Human-in-the-loop A **human-in-the-loop** review is required for every high-risk AI action before it takes effect [1]. Scope This standard applies to every AI system that supports, informs, or automates a business process at Lumen Ridge, including generative AI assistants, agents, retrieval systems, and classical machine-learning models [2]. Each system is registered in the AI inventory with an accountable owner, business purpose, model tier, data classification, and review date [2].",
+      "latency_ms": 2.586,
+      "cost_usd": 0.0,
+      "citation_count": 2,
+      "keyword_hits": [
+        "human-in-the-loop",
+        "high-risk"
+      ],
+      "failures": [],
+      "trace_id": "tr_f52a0bd8c53c4f9d"
+    },
+    {
+      "id": "governance-retention",
+      "agent": "governance-advisor",
+      "passed": true,
+      "status": "completed",
+      "answer": "Based on the approved knowledge base: Prompt and response logs AI **prompt and response logs are retained for 90 days** for quality, safety, and incident investigation [1]. AI Data Retention and Privacy Standard > Synthetic reference document for the AgentForge demo [1]. Full prompts should not be copied into general application logs [1].",
+      "latency_ms": 2.374,
+      "cost_usd": 0.0,
+      "citation_count": 1,
+      "keyword_hits": [
+        "90 days"
+      ],
+      "failures": [],
+      "trace_id": "tr_d9064a55fd5642e9"
+    },
+    {
+      "id": "governance-board",
+      "agent": "governance-advisor",
+      "passed": true,
+      "status": "completed",
+      "answer": "Based on the approved knowledge base: Approval and accountability The **AI Review Board** approves high-risk use cases and material changes [1]. triggers suspension of the affected use case until the AI Review Board approves remediation [2]. A high-severity incident triggers suspension of the affected use case until the AI Review Board approves remediation [4].",
+      "latency_ms": 2.275,
+      "cost_usd": 0.0,
+      "citation_count": 3,
+      "keyword_hits": [
+        "ai review board"
+      ],
+      "failures": [],
+      "trace_id": "tr_ca13fc19d6524444"
+    },
+    {
+      "id": "platform-storage",
+      "agent": "platform-architect",
+      "passed": true,
+      "status": "completed",
+      "answer": "Based on the approved knowledge base: Lakehouse and data governance Governed AI data follows a **medallion** lakehouse pattern: bronze for raw immutable ingestion, silver for validated and deduplicated data, and gold for curated business products [1]. **Unity Catalog** provides centralized access control, lineage, auditing, and discovery across the lakehouse [1]. Incident response An incident is declared when an AI system produces harmful output, performs an unauthorized action, leaks data, or is materially unavailable [4].",
+      "latency_ms": 2.41,
+      "cost_usd": 0.0,
+      "citation_count": 2,
+      "keyword_hits": [
+        "medallion",
+        "unity catalog"
+      ],
+      "failures": [],
+      "trace_id": "tr_54d09424524942f3"
+    },
+    {
+      "id": "platform-routing",
+      "agent": "platform-architect",
+      "passed": true,
+      "status": "completed",
+      "answer": "Based on the approved knowledge base: A **routing strategy for low-risk tasks** sends requests to the **smallest** suitable model and uses a cache for repeated prompts [1]. Model gateway All model calls route through a shared **model gateway** [1]. The gateway provides a consistent interface to model providers, model aliases, fallback chains, response caching, **rate limiting**, retry policy, and **cost budgets** by tenant and use case [1].",
+      "latency_ms": 2.546,
+      "cost_usd": 0.0,
+      "citation_count": 1,
+      "keyword_hits": [
+        "smallest",
+        "cache"
+      ],
+      "failures": [],
+      "trace_id": "tr_1762011163e14bd4"
+    },
+    {
+      "id": "platform-cicd",
+      "agent": "platform-architect",
+      "passed": true,
+      "status": "completed",
+      "answer": "Based on the approved knowledge base: Promotion uses CI/CD with automated tests, evaluation thresholds, peer review, and an **approval gate** before **production** [1]. Environments and promotion AI assets move through development, test, and production workspaces [1]. Reliability Production AI workloads define service-level objectives for availability, latency, and error rate [4].",
+      "latency_ms": 2.587,
+      "cost_usd": 0.0,
+      "citation_count": 2,
+      "keyword_hits": [
+        "approval gate",
+        "production"
+      ],
+      "failures": [],
+      "trace_id": "tr_4bd9e05b84844ccc"
+    },
+    {
+      "id": "distribution-email",
+      "agent": "distribution-copilot",
+      "passed": true,
+      "status": "completed",
+      "answer": "Based on the approved knowledge base: Client segments and service tiers The distribution team serves retail, high-net-worth, and institutional clients [1]. Advisor support standards Advisors must respond to client **email within one business day** and return telephone calls the same business day [2]. **Institutional** clients receive a dedicated relationship team, monthly portfolio reviews, custom reporting, and an assigned service manager [1].",
+      "latency_ms": 1.663,
+      "cost_usd": 0.0,
+      "citation_count": 2,
+      "keyword_hits": [
+        "one business day"
+      ],
+      "failures": [],
+      "trace_id": "tr_b59692362d8047da"
+    },
+    {
+      "id": "distribution-tier",
+      "agent": "distribution-copilot",
+      "passed": true,
+      "status": "completed",
+      "answer": "The `lookup_client` tool returned {\"error\": null, \"ok\": true, \"output\": {\"advisor\": \"Dana Whitfield\", \"aum_cad\": 41200000, \"client_id\": \"CL-1001\", \"name\": \"Northlight Foundation\", \"risk_profile\": \"Income\", \"segment\": \"Institutional\", \"service_tier\": \"Institutional\"}}. Supporting policy: Client context The CRM is the authoritative source for segment, service tier, advisor, and relationship history [1]. Client segments and service tiers The distribution team serves retail, high-net-worth, and institutional clients [2]. **Institutional** clients receive a dedicated relationship team, monthly portfolio reviews, custom reporting, and an assigned service manager [2].",
+      "latency_ms": 1.947,
+      "cost_usd": 0.0,
+      "citation_count": 2,
+      "keyword_hits": [
+        "institutional"
+      ],
+      "failures": [],
+      "trace_id": "tr_b54c6a4aadc8487f"
+    },
+    {
+      "id": "tool-calculator",
+      "agent": "research-copilot",
+      "passed": true,
+      "status": "completed",
+      "answer": "The `calculator` tool returned {\"error\": null, \"ok\": true, \"output\": {\"expression\": \"24800000 * 0.05\", \"formatted\": \"1,240,000\", \"result\": 1240000}}. Supporting policy: Concentration limits A single issuer may not exceed **5% of portfolio market value** at the time of purchase [2]. The hard ceiling for any single issuer is 6.5%, measured at month-end close [1]. A single sector may not exceed 25% of portfolio market value without approval from the Investment Risk Committee [1].",
+      "latency_ms": 3.351,
+      "cost_usd": 0.0,
+      "citation_count": 2,
+      "keyword_hits": [
+        "1,240,000",
+        "5%"
+      ],
+      "failures": [],
+      "trace_id": "tr_07553718689f4653"
+    },
+    {
+      "id": "tool-portfolio",
+      "agent": "research-copilot",
+      "passed": true,
+      "status": "completed",
+      "answer": "The `portfolio_lookup` tool returned {\"error\": null, \"ok\": true, \"output\": {\"as_of\": \"2026-09-30\", \"cash_weight\": 0.07, \"currency\": \"CAD\", \"market_value_cad\": 24800000, \"market_value_formatted\": \"24,800,000\", \"name\": \"Lumen Ridge Balanced Model Portfolio\", \"portfolio_id\": \"NW-1042\", \"risk_profile\": \"Balanced\", \"top_holdings\": [{\"name\": \"Lumen Ridge Core Equity Fund\", \"ticker\": \"LRIF\", \"weight\": 0.28}, {\"name\": \"Canadian Dividend Equity ETF\", \"ticker\": \"CADE\", \"weight\": 0.18}, {\"name\": \"Global Quality Equity ETF\", \"ticker\": \"GLBL\", \"weight\": 0.17}]}}. Supporting policy: The top ten holdings may not exceed 35% of portfolio market value [1]. A single sector may not exceed 25% of portfolio market value without approval from the Investment Risk Committee [1]. Liquidity and cash The Core Equity strategy must hold a cash buffer between 2% and 8% of portfolio market value [2].",
+      "latency_ms": 2.804,
+      "cost_usd": 0.0,
+      "citation_count": 2,
+      "keyword_hits": [
+        "24,800,000"
+      ],
+      "failures": [],
+      "trace_id": "tr_d52af87df4314904"
+    },
+    {
+      "id": "refusal-performance",
+      "agent": "research-copilot",
+      "passed": true,
+      "status": "completed",
+      "answer": "I don't have enough grounded evidence in the approved knowledge base to answer that question.",
+      "latency_ms": 2.087,
+      "cost_usd": 0.0,
+      "citation_count": 0,
+      "keyword_hits": [],
+      "failures": [],
+      "trace_id": "tr_d9505cd3d6064b0f"
+    },
+    {
+      "id": "refusal-sensitive",
+      "agent": "governance-advisor",
+      "passed": true,
+      "status": "completed",
+      "answer": "I don't have enough grounded evidence in the approved knowledge base to answer that question.",
+      "latency_ms": 2.319,
+      "cost_usd": 0.0,
+      "citation_count": 0,
+      "keyword_hits": [],
+      "failures": [],
+      "trace_id": "tr_0ed2a50531fe450f"
+    }
+  ]
+}

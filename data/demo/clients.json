@@ -1,0 +1,31 @@
+{
+  "clients": [
+    {
+      "id": "CL-1001",
+      "name": "Northlight Foundation",
+      "segment": "Institutional",
+      "aum_cad": 41200000,
+      "advisor": "Dana Whitfield",
+      "risk_profile": "Income",
+      "service_tier": "Institutional"
+    },
+    {
+      "id": "CL-2044",
+      "name": "Juniper Family Office",
+      "segment": "High-net-worth",
+      "aum_cad": 8450000,
+      "advisor": "Marco Silva",
+      "risk_profile": "Growth",
+      "service_tier": "Priority"
+    },
+    {
+      "id": "CL-3119",
+      "name": "Riverside Cooperative",
+      "segment": "Retail",
+      "aum_cad": 920000,
+      "advisor": "Priya Nair",
+      "risk_profile": "Balanced",
+      "service_tier": "Essential"
+    }
+  ]
+}

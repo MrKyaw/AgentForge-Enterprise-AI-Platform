@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "AgentForge: Enterprise AI Control Plane"
+type: software
+authors:
+  - family-names: "Kyaw"
+    given-names: "Mr"
+    alias: "MrKyaw"
+repository-code: "https://github.com/MrKyaw/AgentForge-Enterprise-AI-Platform"
+url: "https://github.com/MrKyaw/AgentForge-Enterprise-AI-Platform"
+license: MIT
+version: "1.0.0"
+date-released: "2026-10-22"
+keywords:
+  - enterprise ai
+  - ai agents
+  - rag
+  - llm gateway
+  - ai governance
+  - evaluation
+  - fastapi
+abstract: "A governed enterprise AI control plane with hybrid RAG, agent runtime, model gateway, human approvals, tamper-evident audit, FinOps, and evaluation. Runs offline with a deterministic provider."

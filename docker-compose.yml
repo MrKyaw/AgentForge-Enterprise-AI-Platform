@@ -1,0 +1,21 @@
+services:
+  agentforge:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      AGENTFORGE_ENV: production
+      AGENTFORGE_SEED_ON_STARTUP: "true"
+      AGENTFORGE_API_KEYS: ${AGENTFORGE_API_KEYS:-demo-analyst-key:demo:analyst,demo-admin-key:demo:admin,research-analyst-key:research:analyst,viewer-key:demo:viewer}
+      AGENTFORGE_DAILY_BUDGET_USD: ${AGENTFORGE_DAILY_BUDGET_USD:-25}
+    volumes:
+      - agentforge-data:/app/var
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/healthz', timeout=2)"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+
+volumes:
+  agentforge-data:

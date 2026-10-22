@@ -1,0 +1,49 @@
+{
+  "portfolios": [
+    {
+      "id": "NW-1042",
+      "name": "Lumen Ridge Balanced Model Portfolio",
+      "client_id": "CL-1001",
+      "market_value_cad": 24800000,
+      "currency": "CAD",
+      "as_of": "2026-09-30",
+      "risk_profile": "Balanced",
+      "cash_weight": 0.07,
+      "holdings": [
+        {"ticker": "LRIF", "name": "Lumen Ridge Core Equity Fund", "weight": 0.28},
+        {"ticker": "CADE", "name": "Canadian Dividend Equity ETF", "weight": 0.18},
+        {"ticker": "GLBL", "name": "Global Quality Equity ETF", "weight": 0.17}
+      ]
+    },
+    {
+      "id": "NW-2087",
+      "name": "Lumen Ridge Growth Model Portfolio",
+      "client_id": "CL-2044",
+      "market_value_cad": 8450000,
+      "currency": "CAD",
+      "as_of": "2026-09-30",
+      "risk_profile": "Growth",
+      "cash_weight": 0.03,
+      "holdings": [
+        {"ticker": "GLOB", "name": "Global Growth Equity ETF", "weight": 0.34},
+        {"ticker": "TECH", "name": "Innovation Leaders ETF", "weight": 0.26},
+        {"ticker": "SMID", "name": "Small Cap Opportunities ETF", "weight": 0.21}
+      ]
+    },
+    {
+      "id": "NW-3310",
+      "name": "Lumen Ridge Institutional Income Portfolio",
+      "client_id": "CL-3119",
+      "market_value_cad": 41200000,
+      "currency": "CAD",
+      "as_of": "2026-09-30",
+      "risk_profile": "Income",
+      "cash_weight": 0.05,
+      "holdings": [
+        {"ticker": "BOND", "name": "Core Bond Fund", "weight": 0.42},
+        {"ticker": "PREF", "name": "Preferred Share ETF", "weight": 0.18},
+        {"ticker": "DIV", "name": "Dividend Income ETF", "weight": 0.16}
+      ]
+    }
+  ]
+}

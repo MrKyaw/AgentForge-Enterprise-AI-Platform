@@ -1,0 +1,827 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="AgentForge — governed enterprise AI platform with hybrid RAG, agents, approvals, audit, and evaluation.">
+  <title>AgentForge · Enterprise AI Control Plane</title>
+  <style>
+    :root {
+      --bg: #07111f;
+      --bg-2: #0b1a2d;
+      --panel: rgba(15, 32, 53, 0.82);
+      --panel-solid: #102139;
+      --line: rgba(148, 181, 214, 0.16);
+      --text: #e8f1fb;
+      --muted: #8fa8c2;
+      --teal: #5eead4;
+      --teal-dark: #0f766e;
+      --amber: #fbbf24;
+      --rose: #fb7185;
+      --blue: #60a5fa;
+      --shadow: 0 18px 60px rgba(0, 0, 0, 0.35);
+      --radius: 18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--text);
+      background:
+        radial-gradient(1100px 550px at 8% -8%, rgba(94, 234, 212, 0.14), transparent 60%),
+        radial-gradient(900px 500px at 95% 0%, rgba(96, 165, 250, 0.13), transparent 55%),
+        linear-gradient(180deg, var(--bg) 0%, #060e19 100%);
+      font-family: var(--sans);
+      min-height: 100vh;
+      line-height: 1.55;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(148, 181, 214, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(148, 181, 214, 0.035) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: linear-gradient(to bottom, black, transparent 80%);
+      z-index: 0;
+    }
+    .shell { position: relative; z-index: 1; max-width: 1240px; margin: 0 auto; padding: 26px 22px 70px; }
+    header { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .mark {
+      width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center;
+      background: linear-gradient(135deg, rgba(94,234,212,.95), rgba(59,130,246,.9));
+      color: #04111a; font-weight: 900; font-size: 20px;
+      box-shadow: 0 8px 26px rgba(94,234,212,.25);
+    }
+    .brand h1 { font-size: 19px; letter-spacing: .02em; margin: 0; }
+    .brand p { margin: 0; color: var(--muted); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+    .status-wrap { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .pill {
+      display: inline-flex; align-items: center; gap: 7px; padding: 7px 11px; border-radius: 999px;
+      border: 1px solid var(--line); background: rgba(16,33,57,.65); color: var(--muted);
+      font-size: 12px; font-weight: 600;
+    }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--amber); box-shadow: 0 0 10px currentColor; }
+    .dot.online { background: var(--teal); }
+    .dot.offline { background: var(--rose); }
+    .hero { display: grid; grid-template-columns: 1.5fr .8fr; gap: 28px; align-items: end; margin: 56px 0 30px; }
+    .eyebrow { color: var(--teal); font: 600 12px/1.2 var(--mono); letter-spacing: .14em; text-transform: uppercase; }
+    .hero h2 { font-size: clamp(34px, 5vw, 58px); line-height: 1.02; letter-spacing: -.035em; margin: 12px 0 16px; max-width: 780px; }
+    .hero h2 span { color: var(--teal); }
+    .hero p { color: var(--muted); font-size: 16px; max-width: 700px; margin: 0; }
+    .hero-card {
+      border: 1px solid var(--line); border-radius: var(--radius); padding: 18px;
+      background: linear-gradient(160deg, rgba(16,33,57,.9), rgba(9,22,39,.72));
+      box-shadow: var(--shadow);
+    }
+    .hero-card h3 { margin: 0 0 12px; font-size: 13px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .1em; }
+    .flow { display: grid; gap: 8px; font: 12px/1.4 var(--mono); color: #bfd4e8; }
+    .flow div { display: flex; justify-content: space-between; gap: 12px; padding: 8px 10px; border-radius: 8px; background: rgba(7,17,31,.6); border: 1px solid rgba(148,181,214,.08); }
+    .flow em { color: var(--teal); font-style: normal; }
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 26px 0; }
+    .stat { padding: 18px; border: 1px solid var(--line); border-radius: 14px; background: rgba(12,27,46,.66); }
+    .stat b { display: block; font-size: 28px; letter-spacing: -.03em; }
+    .stat span { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .09em; }
+    .tabs { display: flex; gap: 8px; border-bottom: 1px solid var(--line); margin: 30px 0 20px; overflow-x: auto; }
+    .tab {
+      appearance: none; background: transparent; border: 0; color: var(--muted); padding: 11px 14px;
+      font: 600 13px var(--sans); cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap;
+    }
+    .tab.active { color: var(--text); border-bottom-color: var(--teal); }
+    .panel { display: none; }
+    .panel.active { display: block; animation: fade .25s ease; }
+    @keyframes fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+    .grid-2 { display: grid; grid-template-columns: 1.35fr .65fr; gap: 18px; align-items: start; }
+    .card {
+      border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel);
+      box-shadow: var(--shadow); backdrop-filter: blur(8px); padding: 20px;
+    }
+    .card h3 { margin: 0 0 4px; font-size: 16px; }
+    .card .sub { color: var(--muted); font-size: 13px; margin: 0 0 16px; }
+    label { display: block; font-size: 12px; color: var(--muted); margin: 0 0 6px; font-weight: 600; letter-spacing: .04em; }
+    input, select, textarea, button { font: inherit; }
+    input, select, textarea {
+      width: 100%; color: var(--text); background: rgba(7,17,31,.78); border: 1px solid var(--line);
+      border-radius: 10px; padding: 11px 12px; outline: none; transition: border .15s, box-shadow .15s;
+    }
+    input:focus, select:focus, textarea:focus { border-color: rgba(94,234,212,.65); box-shadow: 0 0 0 3px rgba(94,234,212,.1); }
+    textarea { min-height: 116px; resize: vertical; }
+    .row { display: grid; grid-template-columns: 1fr 190px; gap: 12px; }
+    .actions { display: flex; gap: 10px; align-items: center; margin-top: 12px; flex-wrap: wrap; }
+    .btn {
+      appearance: none; border: 1px solid transparent; border-radius: 10px; cursor: pointer;
+      padding: 11px 16px; font-weight: 700; font-size: 13px; transition: transform .12s, opacity .12s;
+      background: linear-gradient(135deg, var(--teal), #38bdf8); color: #04111a;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn:disabled { opacity: .5; cursor: wait; transform: none; }
+    .btn.secondary { background: transparent; color: var(--text); border-color: var(--line); }
+    .btn.danger { background: rgba(251,113,133,.12); color: #fecdd3; border-color: rgba(251,113,133,.4); }
+    .btn.small { padding: 7px 10px; font-size: 12px; }
+    .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+    .chip {
+      border: 1px solid var(--line); background: rgba(16,33,57,.55); color: #b9d0e6; border-radius: 999px;
+      padding: 6px 10px; font-size: 11px; cursor: pointer;
+    }
+    .chip:hover { border-color: rgba(94,234,212,.5); color: var(--teal); }
+    .empty { color: var(--muted); font-size: 13px; padding: 18px 0; text-align: center; }
+    .result { margin-top: 20px; display: none; }
+    .result.show { display: block; }
+    .answer { white-space: pre-wrap; font-size: 15px; line-height: 1.7; }
+    .meta { display: flex; flex-wrap: wrap; gap: 7px; margin: 12px 0; }
+    .tag { font: 11px var(--mono); color: #b8d2e8; border: 1px solid var(--line); border-radius: 6px; padding: 4px 7px; background: rgba(7,17,31,.5); }
+    .tag.good { color: var(--teal); border-color: rgba(94,234,212,.3); }
+    .tag.warn { color: var(--amber); border-color: rgba(251,191,36,.3); }
+    .citations { display: grid; gap: 8px; margin-top: 14px; }
+    .citation { border-left: 2px solid var(--teal); padding: 8px 12px; background: rgba(7,17,31,.5); border-radius: 0 8px 8px 0; }
+    .citation b { font-size: 12px; }
+    .citation p { margin: 3px 0 0; color: var(--muted); font-size: 12px; }
+    .agent-list { display: grid; gap: 10px; }
+    .agent-item { border: 1px solid var(--line); border-radius: 12px; padding: 12px; background: rgba(7,17,31,.45); cursor: pointer; }
+    .agent-item:hover { border-color: rgba(94,234,212,.4); }
+    .agent-item.active { border-color: rgba(94,234,212,.7); background: rgba(94,234,212,.06); }
+    .agent-item b { font-size: 13px; }
+    .agent-item p { margin: 4px 0 0; color: var(--muted); font-size: 11.5px; }
+    .agent-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 7px; }
+    .agent-tags span { font: 10px var(--mono); color: #9fb6cd; background: rgba(148,181,214,.08); padding: 3px 6px; border-radius: 5px; }
+    .k-results { display: grid; gap: 10px; margin-top: 16px; }
+    .k-result { border: 1px solid var(--line); border-radius: 10px; padding: 12px; background: rgba(7,17,31,.45); }
+    .k-result .top { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+    .k-result b { font-size: 13px; }
+    .k-result p { color: var(--muted); font-size: 12px; margin: 6px 0 0; }
+    .approval { border: 1px solid rgba(251,191,36,.35); border-radius: 10px; padding: 12px; margin-bottom: 10px; background: rgba(251,191,36,.04); }
+    .approval .top { display: flex; justify-content: space-between; gap: 10px; }
+    .approval code { font: 11px var(--mono); color: #fde68a; }
+    .approval p { color: var(--muted); font-size: 12px; margin: 6px 0; }
+    .toast {
+      position: fixed; right: 20px; bottom: 20px; z-index: 50; max-width: 420px;
+      padding: 12px 14px; border-radius: 10px; border: 1px solid var(--line);
+      background: #102139; color: var(--text); font-size: 13px; box-shadow: var(--shadow);
+      display: none;
+    }
+    .toast.show { display: block; }
+    .toast.error { border-color: rgba(251,113,133,.5); }
+    .footer { margin-top: 38px; color: #6f8aa5; font-size: 12px; display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+    .footer a { color: #9fc3de; }
+    .small-note { color: var(--muted); font-size: 11.5px; }
+    .key-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+    details summary { cursor: pointer; color: var(--muted); font-size: 12px; }
+    code { font-family: var(--mono); }
+    @media (max-width: 900px) {
+      .hero, .grid-2 { grid-template-columns: 1fr; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .row { grid-template-columns: 1fr; }
+      .key-panel { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 520px) {
+      .shell { padding: 18px 14px 50px; }
+      .hero { margin-top: 34px; }
+      .stats { gap: 9px; }
+      .stat b { font-size: 23px; }
+    }
+  </style>
+</head>
+<body>
+<div class="shell">
+  <header>
+    <div class="brand">
+      <div class="mark" aria-hidden="true">A</div>
+      <div>
+        <h1>AgentForge</h1>
+        <p>Enterprise AI Control Plane</p>
+      </div>
+    </div>
+    <div class="status-wrap">
+      <span class="pill"><span id="healthDot" class="dot"></span><span id="healthText">Connecting</span></span>
+      <span class="pill" id="tenantPill">tenant · —</span>
+      <span class="pill">Synthetic data</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <div class="eyebrow">Governed by design · offline ready</div>
+        <h2>AI that ships with <span>evidence</span>, not just answers.</h2>
+        <p>
+          A production-grade reference platform for agentic RAG: policy pre-flight, hybrid retrieval,
+          model routing, approvals for side effects, hash-chained audit, cost control, trace spans,
+          and a golden evaluation set — all in one deterministic demo.
+        </p>
+      </div>
+      <aside class="hero-card">
+        <h3>Request path</h3>
+        <div class="flow">
+          <div><span>01 · identity</span><em>tenant + role</em></div>
+          <div><span>02 · policy</span><em>injection / PII</em></div>
+          <div><span>03 · retrieval</span><em>vector + BM25</em></div>
+          <div><span>04 · agent</span><em>tools + approval</em></div>
+          <div><span>05 · gateway</span><em>route / cache / budget</em></div>
+          <div><span>06 · evidence</span><em>citations + audit</em></div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="stats" aria-label="Platform statistics">
+      <div class="stat"><b id="statAgents">—</b><span>active agents</span></div>
+      <div class="stat"><b id="statDocs">—</b><span>governed docs</span></div>
+      <div class="stat"><b id="statCollections">—</b><span>collections</span></div>
+      <div class="stat"><b id="statPending">—</b><span>pending approvals</span></div>
+    </section>
+
+    <nav class="tabs" role="tablist" aria-label="Workspace">
+      <button class="tab active" data-tab="ask" role="tab" aria-selected="true">Ask an agent</button>
+      <button class="tab" data-tab="knowledge" role="tab" aria-selected="false">Knowledge</button>
+      <button class="tab" data-tab="governance" role="tab" aria-selected="false">Governance</button>
+      <button class="tab" data-tab="usage" role="tab" aria-selected="false">Usage &amp; runs</button>
+    </nav>
+
+    <section class="panel active" id="panel-ask" role="tabpanel">
+      <div class="grid-2">
+        <div>
+          <div class="card">
+            <h3>Grounded agent run</h3>
+            <p class="sub">Every answer is policy-checked, cited, costed, and auditable.</p>
+            <div class="row">
+              <div>
+                <label for="agentSelect">Agent</label>
+                <select id="agentSelect"></select>
+              </div>
+              <div>
+                <label for="modelSelect">Model route</label>
+                <select id="modelSelect">
+                  <option value="">auto (agent default)</option>
+                  <option value="fast">fast</option>
+                  <option value="balanced">balanced</option>
+                  <option value="reasoning">reasoning</option>
+                  <option value="private">private / local</option>
+                </select>
+              </div>
+            </div>
+            <div style="margin-top:12px">
+              <label for="question">Question</label>
+              <textarea id="question" placeholder="Ask about policy, portfolios, governance, or platform architecture. Try one of the prompts below."></textarea>
+            </div>
+            <div class="chips" id="promptChips"></div>
+            <div class="actions">
+              <button class="btn" id="runBtn">Run agent</button>
+              <button class="btn secondary" id="clearBtn" type="button">Clear</button>
+              <span class="small-note" id="runHint">Offline provider is deterministic.</span>
+            </div>
+          </div>
+
+          <div class="card result" id="resultCard" aria-live="polite">
+            <div class="meta" id="resultMeta"></div>
+            <div class="answer" id="answer"></div>
+            <div class="citations" id="citations"></div>
+            <div class="citations" id="toolResults"></div>
+          </div>
+        </div>
+        <div>
+          <div class="card">
+            <h3>Agents in this tenant</h3>
+            <p class="sub">Click to select and load a sample question.</p>
+            <div class="agent-list" id="agentList"></div>
+          </div>
+          <div class="card" style="margin-top:14px">
+            <h3>API keys</h3>
+            <p class="sub">Stored in this browser only. Demo defaults are safe for local use.</p>
+            <label for="analystKey">Analyst key</label>
+            <input id="analystKey" type="password" autocomplete="off">
+            <label for="adminKey" style="margin-top:8px">Admin key</label>
+            <input id="adminKey" type="password" autocomplete="off">
+            <div class="actions">
+              <button class="btn secondary small" id="saveKeys" type="button">Save keys</button>
+              <span class="small-note">Rotate before any deployment.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-knowledge" role="tabpanel">
+      <div class="grid-2">
+        <div class="card">
+          <h3>Hybrid retrieval</h3>
+          <p class="sub">Dense hashing embeddings fused with BM25 using reciprocal rank fusion.</p>
+          <label for="searchQuery">Search the governed corpus</label>
+          <div class="row">
+            <input id="searchQuery" placeholder="e.g. human-in-the-loop requirements">
+            <button class="btn" id="searchBtn" type="button">Search</button>
+          </div>
+          <div class="k-results" id="searchResults"></div>
+        </div>
+        <div class="card">
+          <h3>Collections</h3>
+          <p class="sub">Classification ceilings are enforced per role.</p>
+          <div id="collections"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-governance" role="tabpanel">
+      <div class="grid-2">
+        <div class="card">
+          <h3>Human approval queue</h3>
+          <p class="sub">High-risk tools pause until an admin approves or rejects the action.</p>
+          <div id="approvals"><div class="empty">No pending approvals.</div></div>
+        </div>
+        <div class="card">
+          <h3>Audit integrity</h3>
+          <p class="sub">A SHA-256 hash chain covers every governed event.</p>
+          <button class="btn secondary" id="verifyAudit" type="button">Verify audit chain</button>
+          <div id="auditResult" class="small-note" style="margin-top:12px"></div>
+          <hr style="border-color:var(--line);margin:18px 0">
+          <h3>Try the approval path</h3>
+          <p class="sub">Run this on the Portfolio Operations Copilot:</p>
+          <div class="chips">
+            <button class="chip" data-demo-approval="1">Create a rebalance task for NW-1042</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-usage" role="tabpanel">
+      <div class="grid-2">
+        <div class="card">
+          <h3>Consumption</h3>
+          <p class="sub">Token and cost transparency by model, with a daily tenant budget.</p>
+          <div class="meta" id="usageMeta"></div>
+          <div id="usageModels"></div>
+        </div>
+        <div class="card">
+          <h3>Recent runs</h3>
+          <p class="sub">Persisted results with trace identifiers.</p>
+          <div id="recentRuns"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>AgentForge v1.0.0 · MIT · synthetic data only</span>
+    <span><a href="/docs">API docs</a> · <a href="/metrics">Metrics</a> · <a href="/readyz">Readiness</a></span>
+  </footer>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const store = {
+    analyst: localStorage.getItem("agentforge.analystKey") || "demo-analyst-key",
+    admin: localStorage.getItem("agentforge.adminKey") || "demo-admin-key",
+  };
+  let agents = [];
+  let selectedAgent = null;
+
+  const examples = {
+    "research-copilot": "What is the maximum position size for a single issuer in the core equity strategy?",
+    "portfolio-ops-copilot": "What is the market value of portfolio NW-1042, and create a rebalance task for NW-1042 because the client wants a higher cash buffer.",
+    "client-service-copilot": "How quickly must a client complaint be acknowledged?",
+    "governance-advisor": "When is a human-in-the-loop review required for an AI agent?",
+    "platform-architect": "Which storage and governance pattern should be used for governed AI data?",
+    "distribution-copilot": "What service tier is client CL-1001 in, and how quickly should email be answered?",
+  };
+
+  function toast(message, isError = false) {
+    const el = $("toast");
+    el.textContent = message;
+    el.className = "toast show" + (isError ? " error" : "");
+    clearTimeout(toast.timer);
+    toast.timer = setTimeout(() => { el.className = "toast"; }, 4200);
+  }
+
+  async function api(path, options = {}, key = store.analyst) {
+    const headers = { "X-API-Key": key, ...(options.headers || {}) };
+    if (options.body) headers["Content-Type"] = "application/json";
+    const response = await fetch(path, { ...options, headers });
+    const text = await response.text();
+    let data = null;
+    try { data = text ? JSON.parse(text) : null; } catch { data = { error: { message: text } }; }
+    if (!response.ok) {
+      const message = data?.error?.message || `Request failed (${response.status})`;
+      const error = new Error(message);
+      error.status = response.status;
+      error.data = data;
+      throw error;
+    }
+    return data;
+  }
+
+  function setTab(name) {
+    document.querySelectorAll(".tab").forEach((tab) => {
+      const active = tab.dataset.tab === name;
+      tab.classList.toggle("active", active);
+      tab.setAttribute("aria-selected", String(active));
+    });
+    document.querySelectorAll(".panel").forEach((panel) => {
+      panel.classList.toggle("active", panel.id === `panel-${name}`);
+    });
+    if (name === "governance") loadApprovals();
+    if (name === "usage") { loadUsage(); loadRuns(); }
+  }
+
+  document.querySelectorAll(".tab").forEach((tab) => {
+    tab.addEventListener("click", () => setTab(tab.dataset.tab));
+  });
+
+  function renderAgents() {
+    const list = $("agentList");
+    const select = $("agentSelect");
+    list.innerHTML = "";
+    select.innerHTML = "";
+    agents.forEach((agent) => {
+      const option = document.createElement("option");
+      option.value = agent.name;
+      option.textContent = agent.display_name;
+      select.appendChild(option);
+
+      const item = document.createElement("div");
+      item.className = "agent-item" + (agent.name === selectedAgent ? " active" : "");
+      const title = document.createElement("b");
+      title.textContent = agent.display_name;
+      const desc = document.createElement("p");
+      desc.textContent = agent.description;
+      const tags = document.createElement("div");
+      tags.className = "agent-tags";
+      [agent.risk_level + " risk", ...(agent.tags || []).slice(0, 3)].forEach((tag) => {
+        const span = document.createElement("span");
+        span.textContent = tag;
+        tags.appendChild(span);
+      });
+      item.append(title, desc, tags);
+      item.addEventListener("click", () => selectAgent(agent.name));
+      list.appendChild(item);
+    });
+    if (agents.length) selectAgent(agents[0].name);
+  }
+
+  function selectAgent(name) {
+    selectedAgent = name;
+    $("agentSelect").value = name;
+    document.querySelectorAll(".agent-item").forEach((item, index) => {
+      item.classList.toggle("active", agents[index]?.name === name);
+    });
+    renderChips();
+  }
+
+  function renderChips() {
+    const chips = $("promptChips");
+    chips.innerHTML = "";
+    const prompt = examples[selectedAgent];
+    if (!prompt) return;
+    const button = document.createElement("button");
+    button.className = "chip";
+    button.type = "button";
+    button.textContent = prompt.length > 88 ? prompt.slice(0, 88) + "…" : prompt;
+    button.title = prompt;
+    button.addEventListener("click", () => { $("question").value = prompt; $("question").focus(); });
+    chips.appendChild(button);
+    if (selectedAgent === "portfolio-ops-copilot") {
+      const approval = document.createElement("button");
+      approval.className = "chip";
+      approval.type = "button";
+      approval.textContent = "Create approval request";
+      approval.addEventListener("click", () => {
+        $("question").value = "Create a rebalance task for portfolio NW-1042 because the client requested a five percent cash buffer.";
+        $("question").focus();
+      });
+      chips.appendChild(approval);
+    }
+  }
+
+  $("agentSelect").addEventListener("change", (event) => selectAgent(event.target.value));
+
+  function renderAnswer(run) {
+    $("resultCard").classList.add("show");
+    const meta = $("resultMeta");
+    meta.innerHTML = "";
+    const tags = [
+      ["status: " + run.status, run.status === "completed" ? "good" : "warn"],
+      ["model: " + run.model, ""],
+      [run.latency_ms.toFixed(0) + " ms", ""],
+      ["$" + run.cost_usd.toFixed(6), ""],
+      [run.usage.prompt_tokens + run.usage.completion_tokens + " tokens", ""],
+      [run.citations.length + " citations", run.citations.length ? "good" : "warn"],
+    ];
+    tags.forEach(([label, kind]) => {
+      const span = document.createElement("span");
+      span.className = "tag " + kind;
+      span.textContent = label;
+      meta.appendChild(span);
+    });
+    if (run.cached) {
+      const span = document.createElement("span");
+      span.className = "tag good";
+      span.textContent = "cached";
+      meta.appendChild(span);
+    }
+    $("answer").textContent = run.answer;
+    const citations = $("citations");
+    citations.innerHTML = "";
+    run.citations.forEach((citation) => {
+      const card = document.createElement("div");
+      card.className = "citation";
+      const title = document.createElement("b");
+      title.textContent = `[${citation.index}] ${citation.title}`;
+      const snippet = document.createElement("p");
+      snippet.textContent = citation.snippet;
+      card.append(title, snippet);
+      citations.appendChild(card);
+    });
+    const tools = $("toolResults");
+    tools.innerHTML = "";
+    if (run.tools_used?.length) {
+      run.tools_used.forEach((tool) => {
+        const card = document.createElement("div");
+        card.className = "citation";
+        const title = document.createElement("b");
+        title.textContent = `tool · ${tool.name}`;
+        const body = document.createElement("p");
+        body.textContent = JSON.stringify(tool.output ?? tool.error);
+        card.append(title, body);
+        tools.appendChild(card);
+      });
+    }
+    if (run.warnings?.length) {
+      const span = document.createElement("div");
+      span.className = "meta";
+      run.warnings.forEach((warning) => {
+        const tag = document.createElement("span");
+        tag.className = "tag warn";
+        tag.textContent = warning;
+        span.appendChild(tag);
+      });
+      tools.appendChild(span);
+    }
+    if (run.status === "pending_approval") {
+      const note = document.createElement("div");
+      note.className = "approval";
+      note.innerHTML = `<div class="top"><b>Human approval required</b><code>${run.approval_id}</code></div>
+        <p>Open the Governance tab to approve or reject this action with an admin key.</p>`;
+      tools.appendChild(note);
+      loadApprovals();
+    }
+    $("resultCard").scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+
+  async function runAgent() {
+    const input = $("question").value.trim();
+    if (!input) { toast("Enter a question first.", true); return; }
+    const button = $("runBtn");
+    button.disabled = true;
+    button.textContent = "Running…";
+    try {
+      const payload = { input };
+      if ($("modelSelect").value) payload.model = $("modelSelect").value;
+      const run = await api(`/v1/agents/${encodeURIComponent(selectedAgent)}/run`, {
+        method: "POST",
+        body: JSON.stringify(payload),
+      });
+      renderAnswer(run);
+      toast("Run complete · " + run.run_id);
+      loadUsage();
+    } catch (error) {
+      toast(error.message, true);
+    } finally {
+      button.disabled = false;
+      button.textContent = "Run agent";
+    }
+  }
+
+  $("runBtn").addEventListener("click", runAgent);
+  $("clearBtn").addEventListener("click", () => {
+    $("question").value = "";
+    $("resultCard").classList.remove("show");
+    $("question").focus();
+  });
+
+  async function loadStats() {
+    try {
+      const [collections, usage, approvals] = await Promise.all([
+        api("/v1/knowledge/collections"),
+        api("/v1/usage/summary?days=7"),
+        api("/v1/approvals?status=pending", {}, store.admin).catch(() => []),
+      ]);
+      $("statAgents").textContent = agents.length;
+      $("statDocs").textContent = collections.reduce((sum, item) => sum + item.documents, 0);
+      $("statCollections").textContent = collections.length;
+      $("statPending").textContent = approvals.length;
+    } catch (error) {
+      toast(error.message, true);
+    }
+  }
+
+  async function loadCollections() {
+    try {
+      const collections = await api("/v1/knowledge/collections");
+      const wrap = $("collections");
+      wrap.innerHTML = "";
+      if (!collections.length) { wrap.innerHTML = '<div class="empty">No documents ingested.</div>'; return; }
+      collections.forEach((collection) => {
+        const item = document.createElement("div");
+        item.className = "k-result";
+        item.innerHTML = `<div class="top"><b>${collection.collection}</b><span class="tag">${collection.documents} docs</span></div>
+          <p>${collection.chunks} chunks · ${Object.entries(collection.classifications).map(([k,v]) => k + ": " + v).join(" · ")}</p>`;
+        wrap.appendChild(item);
+      });
+    } catch (error) { toast(error.message, true); }
+  }
+
+  async function searchKnowledge() {
+    const query = $("searchQuery").value.trim();
+    if (!query) { toast("Enter a search query.", true); return; }
+    try {
+      const results = await api("/v1/knowledge/search", {
+        method: "POST",
+        body: JSON.stringify({ query, top_k: 5 }),
+      });
+      const wrap = $("searchResults");
+      wrap.innerHTML = "";
+      if (!results.length) { wrap.innerHTML = '<div class="empty">No matching passages.</div>'; return; }
+      results.forEach((hit, index) => {
+        const item = document.createElement("div");
+        item.className = "k-result";
+        const top = document.createElement("div");
+        top.className = "top";
+        const title = document.createElement("b");
+        title.textContent = `${index + 1}. ${hit.title}`;
+        const score = document.createElement("span");
+        score.className = "tag";
+        score.textContent = "rrf " + hit.score.toFixed(5);
+        top.append(title, score);
+        const body = document.createElement("p");
+        body.textContent = hit.content.slice(0, 420) + (hit.content.length > 420 ? "…" : "");
+        item.append(top, body);
+        wrap.appendChild(item);
+      });
+    } catch (error) { toast(error.message, true); }
+  }
+  $("searchBtn").addEventListener("click", searchKnowledge);
+  $("searchQuery").addEventListener("keydown", (event) => { if (event.key === "Enter") searchKnowledge(); });
+
+  async function loadApprovals() {
+    const wrap = $("approvals");
+    try {
+      const approvals = await api("/v1/approvals?status=pending", {}, store.admin);
+      wrap.innerHTML = "";
+      if (!approvals.length) {
+        wrap.innerHTML = '<div class="empty">No pending approvals. Trigger one from the Portfolio Operations Copilot.</div>';
+        return;
+      }
+      approvals.forEach((approval) => {
+        const item = document.createElement("div");
+        item.className = "approval";
+        const top = document.createElement("div");
+        top.className = "top";
+        const title = document.createElement("b");
+        title.textContent = `${approval.tool} · ${approval.agent}`;
+        const code = document.createElement("code");
+        code.textContent = approval.id;
+        top.append(title, code);
+        const detail = document.createElement("p");
+        detail.textContent = JSON.stringify(approval.arguments);
+        const actions = document.createElement("div");
+        actions.className = "actions";
+        const approve = document.createElement("button");
+        approve.className = "btn small";
+        approve.textContent = "Approve";
+        approve.addEventListener("click", () => decide(approval.id, true));
+        const reject = document.createElement("button");
+        reject.className = "btn danger small";
+        reject.textContent = "Reject";
+        reject.addEventListener("click", () => decide(approval.id, false));
+        actions.append(approve, reject);
+        item.append(top, detail, actions);
+        wrap.appendChild(item);
+      });
+    } catch (error) {
+      wrap.innerHTML = `<div class="empty">${error.status === 403 ? "Admin key required." : "Unable to load approvals."}</div>`;
+    }
+  }
+
+  async function decide(id, approve) {
+    try {
+      const result = await api(`/v1/approvals/${id}/${approve ? "approve" : "reject"}`, { method: "POST" }, store.admin);
+      toast((approve ? "Approved · " : "Rejected · ") + result.approval.tool);
+      loadApprovals();
+      loadStats();
+    } catch (error) { toast(error.message, true); }
+  }
+
+  $("verifyAudit").addEventListener("click", async () => {
+    try {
+      const result = await api("/v1/audit/verify", {}, store.admin);
+      $("auditResult").textContent = `${result.ok ? "✓" : "✗"} ${result.message} (${result.events} events)`;
+      $("auditResult").style.color = result.ok ? "var(--teal)" : "var(--rose)";
+      toast(result.ok ? "Audit chain verified." : "Audit chain verification failed.", !result.ok);
+    } catch (error) { toast(error.message, true); }
+  });
+
+  async function loadUsage() {
+    try {
+      const usage = await api("/v1/usage/summary?days=7");
+      $("usageMeta").innerHTML = "";
+      [
+        ["requests", usage.requests],
+        ["tokens", usage.total_tokens],
+        ["spend today", "$" + usage.spend_today_usd.toFixed(6)],
+        ["7-day cost", "$" + usage.total_cost_usd.toFixed(6)],
+        ["cached", usage.cached_requests],
+      ].forEach(([label, value]) => {
+        const span = document.createElement("span");
+        span.className = "tag";
+        span.textContent = `${label}: ${value}`;
+        $("usageMeta").appendChild(span);
+      });
+      const wrap = $("usageModels");
+      wrap.innerHTML = "";
+      if (!usage.by_model.length) { wrap.innerHTML = '<div class="empty">No model calls yet.</div>'; return; }
+      usage.by_model.forEach((model) => {
+        const item = document.createElement("div");
+        item.className = "k-result";
+        item.innerHTML = `<div class="top"><b>${model.model}</b><span class="tag">$${model.cost_usd.toFixed(6)}</span></div>
+          <p>${model.requests} requests · ${model.tokens} tokens</p>`;
+        wrap.appendChild(item);
+      });
+    } catch (error) { toast(error.message, true); }
+  }
+
+  async function loadRuns() {
+    try {
+      const runs = await api("/v1/runs?limit=8");
+      const wrap = $("recentRuns");
+      wrap.innerHTML = "";
+      if (!runs.length) { wrap.innerHTML = '<div class="empty">No runs yet.</div>'; return; }
+      runs.forEach((run) => {
+        const item = document.createElement("div");
+        item.className = "k-result";
+        const top = document.createElement("div");
+        top.className = "top";
+        const title = document.createElement("b");
+        title.textContent = run.agent + " · " + run.status;
+        const score = document.createElement("span");
+        score.className = "tag";
+        score.textContent = run.latency_ms.toFixed(0) + " ms";
+        top.append(title, score);
+        const body = document.createElement("p");
+        body.textContent = run.answer.slice(0, 180) + (run.answer.length > 180 ? "…" : "");
+        item.append(top, body);
+        wrap.appendChild(item);
+      });
+    } catch (error) { toast(error.message, true); }
+  }
+
+  $("saveKeys").addEventListener("click", () => {
+    store.analyst = $("analystKey").value.trim() || "demo-analyst-key";
+    store.admin = $("adminKey").value.trim() || "demo-admin-key";
+    localStorage.setItem("agentforge.analystKey", store.analyst);
+    localStorage.setItem("agentforge.adminKey", store.admin);
+    toast("Keys saved for this browser.");
+    boot();
+  });
+
+  document.querySelectorAll("[data-demo-approval]").forEach((button) => {
+    button.addEventListener("click", () => {
+      setTab("ask");
+      selectAgent("portfolio-ops-copilot");
+      $("question").value = "Create a rebalance task for portfolio NW-1042 because the client requested a five percent cash buffer.";
+      $("question").focus();
+      toast("Run the agent, then approve the request here.");
+    });
+  });
+
+  async function boot() {
+    $("analystKey").value = store.analyst;
+    $("adminKey").value = store.admin;
+    try {
+      const health = await fetch("/healthz").then((response) => response.json());
+      $("healthDot").classList.add(health.status === "ok" ? "online" : "offline");
+      $("healthText").textContent = health.status === "ok" ? "Platform online" : "Degraded";
+    } catch {
+      $("healthDot").classList.add("offline");
+      $("healthText").textContent = "Offline";
+    }
+    try {
+      const who = await api("/v1/whoami");
+      $("tenantPill").textContent = `${who.tenant} · ${who.role}`;
+      agents = await api("/v1/agents");
+      renderAgents();
+      await Promise.all([loadStats(), loadCollections(), loadUsage(), loadRuns()]);
+    } catch (error) {
+      toast("Authentication failed. Check the analyst key.", true);
+      $("tenantPill").textContent = "unauthenticated";
+    }
+  }
+
+  boot();
+})();
+</script>
+</body>
+</html>
