@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from enum import Enum
+from enum import StrEnum
 from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
@@ -10,34 +10,34 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 from agentforge.util import new_id, now_iso
 
 
-class Role(str, Enum):
+class Role(StrEnum):
     SYSTEM = "system"
     USER = "user"
     ASSISTANT = "assistant"
     TOOL = "tool"
 
 
-class Classification(str, Enum):
+class Classification(StrEnum):
     PUBLIC = "public"
     INTERNAL = "internal"
     CONFIDENTIAL = "confidential"
     RESTRICTED = "restricted"
 
 
-class RiskLevel(str, Enum):
+class RiskLevel(StrEnum):
     LOW = "low"
     MEDIUM = "medium"
     HIGH = "high"
 
 
-class Lifecycle(str, Enum):
+class Lifecycle(StrEnum):
     ACTIVE = "active"
     DRAFT = "draft"
     DEPRECATED = "deprecated"
     RETIRED = "retired"
 
 
-class RunStatus(str, Enum):
+class RunStatus(StrEnum):
     COMPLETED = "completed"
     PENDING_APPROVAL = "pending_approval"
     REJECTED = "rejected"
@@ -46,7 +46,7 @@ class RunStatus(str, Enum):
     FAILED = "failed"
 
 
-class ApprovalStatus(str, Enum):
+class ApprovalStatus(StrEnum):
     PENDING = "pending"
     APPROVED = "approved"
     REJECTED = "rejected"
